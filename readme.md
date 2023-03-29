@@ -1,43 +1,30 @@
-# YAO 应用开发 Typescript 模板使用
-
-使用 typescript 进行 yao 应用开发,包含必要的 TS 编译脚本配置。TS 开发测试脚本。
-
-## 说明
-
-项目内置了使用`ts`开发`yao`应用的各种工具。
-
-比如在`ts`脚本文件中可以引用`yao`各种专有对象的方法
-
-```js
-import { Process, log, Exception, WebSocket } from "yao-node-client";
-```
+# YAO 应用开发脚本调试工具
 
 ## 开发环境准备
 
 ```sh
-git clone git@github.com:wwsheng009/yao-app-ts-template.git yao-app-ts
-cd yao-app-ts
+git clone https://github.com/wwsheng009/yao-app-debugger
+cd yao-app-debugger
 pnpm i
 ```
 
-### 设置`TS`开发环境变量
+### 设置环境变量
 
 ```sh
 cp .env.sample .env
 ```
 
 - `YAO_APP_PROXY_ENDPOINT`
-  `Yao`应用的访问`API`地址,一般设置成`http://localhost:5199/api/proxy/call`
+  `Yao`应用的访问`API`地址,一般设置成`http://localhost:5099/api/proxy/call`
   `
+- `YAO_API_ACCESS_KEY`
+  为了接口安全，请设置此变量。**同时需要在 `YAO`应用目录下的`.env`文件中设置此环境变量**
 
 - `YAO_APP_ROOT`
   `YAO`应用的根目录，比如：`/data/projects/yao/demos-v1.0/yao-chatgpt/`
 
-- `YAO_API_ACCESS_KEY`
-  为了接口安全，请设置此变量。**同时需要在 `YAO`应用目录下的`.env`文件中设置此环境变量**
-
 - `LOCAL_APP_ROOT`
-  编译后的脚本的目录，设置成`dist/app`
+  本地脚本的目录，设置成`./dist/source/app`
 
 ## `Yao`应用设置
 
@@ -55,6 +42,10 @@ REMOTE_DEBUG_SERVER="http://localhost:8082/api/proxy/call"
 YAO_API_ACCESS_KEY='Your_key'
 ```
 
+```sh
+pnpm run "deloy:config"
+```
+
 ## 注意
 
 如果是开发`studio`脚本,并且在脚本中有写`dsl`文件的操作。，`Yao`的环境变量需要修改成正式模式,防止在脚本运行过程中运行环境被不断的重载
@@ -64,7 +55,7 @@ YAO_ENV="production"
 
 ```
 
-## 在 TS 中调用 Yao 脚本。
+## 调试 Yao 脚本。
 
 在`Yao`应用目录执行,这一步是必要的。
 
@@ -72,11 +63,17 @@ YAO_ENV="production"
 yao start
 ```
 
-`Yao`应用启动后，就可以`ts`项目中调用所有`yao`应用中的处理器与`API`。
+`Yao`应用启动后，就可以本项目中调用所有`yao`应用中的处理器与`API`。
 
 处理器的调用方法，按 yao 脚本的格式进行处理即可。比如调用处理器就使用 Process 函数。调用查询就用 new Query()对象。在 nodejs 中已经封装了相关的函数与对象。
 
-## 在 yao 中调用 ts 代码
+## vscode 调试
+
+`vscode`环境下已内置调试配置：
+
+- `Launch Yao Script`
+
+## 在 yao 中调用远程代码
 
 在 ts 项目中启动本地开发代理服务器。
 
@@ -125,29 +122,4 @@ scripts.remote.Ping 返回结果
 }
 --------------------------------------
 ✨完成✨
-```
-
-## 调试
-
-`vscode`环境下已内置了两种调试配置：
-
-- `TS-NODE Launch Yao Script`
-- `Launch Yao Script`
-
-## 编译
-
-执行以下命令编译脚本
-
-```sh
-pnpm run yao:build-fix
-```
-
-复制目录`dist_esm/app/scripts`中的脚本到你的`Yao`应用目录
-
-### 脚本打包合并
-
-如果功能复杂的脚本，可以单独在目录`src/app/scripts`创建一个脚本目录,目录下创建一个`index.ts`。那么执行以下脚本，整个目录会被打包成一个`js`脚本。
-
-```sh
-pnpm run yao:pack
 ```

@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon ./src/server/index.js",
     "test": "node dist/test/test.js",
     "copy:source": "node ./src/tools/source.js",
     "copy:target": "node ./src/tools/target.js",
+    "deloy:config": "node ./src/tools/deloy.js",
     "target:file": "node ./src/tools/target.js -f dist/source/app/studio/init2.js"
   },
   "keywords": [
@@ -18,6 +20,10 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "yao-node-client": "*",
+    "yao-node-server": "1.0.0",
     "yargs": "^17.7.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
   }
 }
