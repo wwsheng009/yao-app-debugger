@@ -1,0 +1,23 @@
+{
+  "name": "yao-node-app-ts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node dist/test/test.js",
+    "copy:source": "node ./src/tools/source.js",
+    "copy:target": "node ./src/tools/target.js",
+    "target:file": "node ./src/tools/target.js -f dist/source/app/studio/init2.js"
+  },
+  "keywords": [
+    "yao",
+    "lowcode"
+  ],
+  "author": "vincentwwsheng@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "yao-node-client": "*",
+    "yargs": "^17.7.1"
+  }
+}
