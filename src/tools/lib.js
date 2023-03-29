@@ -1,15 +1,37 @@
 const fs = require("fs");
-const path = require("node:path");
-
-const yargs = require("yargs/yargs");
-const { hideBin } = require("yargs/helpers");
-const { FixFolderAndFile, GetAllJsFiles, CheckIsJsFile } = require("./utils");
 
 /**
  * 简单处理js文件
  * @param filename 文件名
  */
-function processComment(filename) {
+function CleanupFile(filename) {
+  if (!fs.existsSync(filename)) {
+    return;
+  }
+  const content = fs.readFileSync(filename, "utf8");
+
+  let data = content;
+  const regex = /const[\s\S]*require\("yao-node-client"\)[;]?[\r\n]?[\r\n]?/gi;
+  data = data.replace(regex, "");
+
+  // /module\.exports[^]*[;]\n[\n]?/gi
+  const regex2 = /module\.exports[\s\S]*}[;]?[\r\n]?[\r\n]?/gi;
+  data = data.replace(regex2, "");
+
+  const regex3 = /exports\.[\s\S]*[;]?[\r\n]?[\r\n]?/gi;
+
+  data = data.replace(regex3, "");
+  if (content != data) {
+    fs.writeFileSync(filename, data);
+    console.log(`File ${filename} updated and saved!`);
+  }
+}
+
+/**
+ * 简单处理js文件
+ * @param filename 文件名
+ */
+function PatchFile(filename) {
   if (!fs.existsSync(filename)) {
     return;
   }
@@ -72,66 +94,4 @@ function processComment(filename) {
   console.log(`File ${filename} updated and saved!`);
 }
 
-function fixCodes(folder) {
-  let files = GetAllJsFiles(folder);
-  for (const file of files) {
-    processComment(file);
-  }
-}
-function fixFile(fname) {
-  if (!CheckIsJsFile(fname)) {
-    console.log("Not js file");
-    return;
-  }
-  processComment(fname);
-}
-/**
- * 清理与修正nodejs打包生成生成的代码。
- */
-function main() {
-  const argv = yargs(hideBin(process.argv))
-    .options({
-      source: {
-        alias: "s",
-        type: "string",
-        default: "",
-      },
-      target: {
-        alias: "t",
-        type: "string",
-        default: "",
-      },
-      file: {
-        alias: "f",
-        type: "string",
-        default: "",
-      },
-    })
-    .parseSync();
-
-  let sourceFolder = argv.source;
-
-  if (sourceFolder === "") {
-    require("dotenv").config();
-    if (process.env.YAO_APP_ROOT) {
-      sourceFolder = process.env.YAO_APP_ROOT;
-    }
-  }
-  sourceFolder = path.resolve(sourceFolder);
-
-  let targetFolder = argv.target;
-
-  if (targetFolder === "") {
-    require("dotenv").config();
-    if (process.env.LOCAL_APP_ROOT) {
-      targetFolder = process.env.LOCAL_APP_ROOT;
-    }
-  }
-  targetFolder = path.resolve(targetFolder);
-
-  let sourceFile = path.resolve(argv.file);
-
-  FixFolderAndFile(sourceFolder, targetFolder, sourceFile, fixCodes, fixFile);
-}
-
-main();
+module.exports = { CleanupFile, PatchFile };

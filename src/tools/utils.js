@@ -102,7 +102,7 @@ function GetAllJsFiles(dir) {
 }
 
 module.exports = {
-  copyFolder: CopyFolder,
+  CopyFolder,
   FixFolderAndFile,
   GetAllJsFiles,
   CheckIsJsFile,

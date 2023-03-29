@@ -15,6 +15,8 @@ function main() {
   copyFile("scripts/jsproxy.js");
   copyFile("scripts/security.js");
   copyFile("scripts/remote.js");
+
+  copyConfig();
 }
 
 function copyFile(fileName) {
