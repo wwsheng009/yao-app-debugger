@@ -1,3 +1,3 @@
-export function Ping() {
+function Ping() {
   return "Pong";
 }

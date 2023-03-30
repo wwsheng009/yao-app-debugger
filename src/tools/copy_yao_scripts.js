@@ -92,6 +92,11 @@ function main() {
     path.join(targetAppFolder, "scripts/security.js"),
     fixFileCallback
   );
+  FixFile(
+    "src/app/scripts/ping.js",
+    path.join(targetAppFolder, "scripts/ping.js"),
+    fixFileCallback
+  );
   fs.mkdirSync(path.join(targetAppFolder, "apis"), {
     recursive: true,
   });
@@ -102,3 +107,11 @@ function main() {
 }
 
 main();
+
+// const targetAppFolder =
+//   "/data/projects/yao/demos-v1.0/yao-node-projects/packages/yao-app-debugger/dist/source/app";
+// FixFile(
+//   "src/app/scripts/jsproxy.js",
+//   path.join(targetAppFolder, "scripts/jsproxy.js"),
+//   fixFileCallback
+// );

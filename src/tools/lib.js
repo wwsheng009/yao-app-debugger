@@ -37,14 +37,11 @@ function PatchFile(filename) {
   }
   const fileContent = fs.readFileSync(filename, "utf8");
   // Define the regular expression to match function names
-  const regex = /function\s+([a-zA-Z_$][0-9a-zA-Z_$]*)\s*\(/g;
+  const regex = /^function\s+([a-zA-Z_$][0-9a-zA-Z_$]*)\s*\(/g;
 
   // Find all matches
-  let match;
+
   const functionNames = [];
-  while ((match = regex.exec(fileContent)) !== null) {
-    functionNames.push(match[1]);
-  }
 
   const lines = fileContent.split("\n");
 
@@ -55,6 +52,12 @@ function PatchFile(filename) {
   // Check if remaining lines contain the string "new Query"
 
   let words = filteredLines.reduce((result, line) => {
+    let matchFuntion;
+    while ((matchFuntion = regex.exec(line)) !== null) {
+      if (!functionNames.includes(matchFuntion[1])) {
+        functionNames.push(matchFuntion[1]);
+      }
+    }
     let match = line.match(/\s(log|http)\./);
     if (match) {
       if (match[1]) {
@@ -83,42 +86,6 @@ function PatchFile(filename) {
 
     return result;
   }, []);
-
-  // let words = [];
-  // if (filteredLines.some((line) => /\slog\./.test(line))) {
-  //   words.push("log");
-  // }
-
-  // if (filteredLines.some((line) => /\shttp\./.test(line))) {
-  //   words.push("http");
-  // }
-
-  // if (filteredLines.some((line) => /\snew\s*Store\(/.test(line))) {
-  //   words.push("Store");
-  // }
-
-  // if (filteredLines.some((line) => /\snew\s*Exception\(/.test(line))) {
-  //   words.push("Exception");
-  // }
-
-  // if (filteredLines.some((line) => /\snew\s*FS\(/.test(line))) {
-  //   words.push("FS");
-  // }
-
-  // if (filteredLines.some((line) => /\snew\s*WebSocket\(/.test(line))) {
-  //   words.push("WebSocket");
-  // }
-
-  // if (filteredLines.some((line) => /\snew\s*Query\(/.test(line))) {
-  //   words.push("Query");
-  // }
-
-  // if (filteredLines.some((line) => /\sProcess\(/.test(line))) {
-  //   words.push("Process");
-  // }
-  // if (filteredLines.some((line) => /\sStudio\(/.test(line))) {
-  //   words.push("Studio");
-  // }
 
   let data = [];
   let header = "";

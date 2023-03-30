@@ -113,6 +113,6 @@ pnpm run copy:target -t /yao-app-root-dir/
 
 如果是开发`studio`脚本,并且在脚本中有写`dsl`文件的操作。需要把`Yao`的环境变量从`YAO_ENV="development"`修改成`YAO_ENV="production"`,防止在脚本运行过程中 Yao 的运行环境被不断的重载
 
-## 限制
+## API 调试
 
-如果需要拦截 yao 中的 Web API 请求，还需要更多的配置，后面再更新。
+参考：[api debug server](server.md)
