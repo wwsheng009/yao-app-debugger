@@ -1,6 +1,20 @@
 const fs = require("fs");
+const path = require("node:path");
+const yargs = require("yargs/yargs");
+const { hideBin } = require("yargs/helpers");
 
 function main() {
+  const argv = yargs(hideBin(process.argv))
+    .options({
+      env: {
+        alias: "e",
+        type: "string",
+        default: ".env",
+      },
+    })
+    .parseSync();
+  let targetEnvFile = argv.env;
+
   require("dotenv").config();
   if (process.env.YAO_APP_ROOT === "") {
     console.log("请设置环境变量：YAO_APP_ROOT");
@@ -11,12 +25,17 @@ function main() {
     return;
   }
 
+  if (process.env.PORT === "") {
+    console.log("请设置环境变量：PORT");
+    return;
+  }
+
   copyFile("apis/proxy.http.json");
   copyFile("scripts/jsproxy.js");
   copyFile("scripts/security.js");
   copyFile("scripts/remote.js");
 
-  copyConfig();
+  UpdateEnvConfig(targetEnvFile);
 }
 
 function copyFile(fileName) {
@@ -28,23 +47,46 @@ function copyFile(fileName) {
       path.join(sourceFolder, fileName),
       path.join(targetFolder, fileName)
     );
+    console.log(`文件已复制:${fileName}`);
   } else {
-    console.log(`配置文件${fileName}已存在，请检查！`);
+    console.log(`文件:${fileName}已存在，请检查！`);
   }
 }
 
-function copyConfig() {
+function UpdateEnvConfig(envFile) {
   let targetFolder = path.resolve(process.env.YAO_APP_ROOT);
-  let targetFile = path.join(targetFolder, ".env");
-  fs.appendFileSync(
-    targetFile,
-    `YAO_API_ACCESS_KEY=${process.env.YAO_API_ACCESS_KEY}`
+  let targetFile = path.join(targetFolder, envFile);
+
+  let data = fs.readFileSync(targetFile, "utf8");
+  data = updateEnv(
+    data,
+    "YAO_API_ACCESS_KEY",
+    process.env.YAO_API_ACCESS_KEY,
+    "本地调试服务器接口密钥"
   );
 
-  fs.appendFileSync(
-    targetFile,
-    `REMOTE_DEBUG_SERVER=http://localhost:${process.env.PORT}/api/proxy/call`
+  data = updateEnv(
+    data,
+    "REMOTE_DEBUG_SERVER",
+    `http://localhost:${process.env.PORT}/api/proxy/call`,
+    "调试服务接口"
   );
+
+  fs.writeFileSync(targetFile, data);
+  console.log(`配置文件:${targetFile}已更新。`);
+}
+
+function updateEnv(data, key, value, comment) {
+  // Check if the .env file contains the key
+  if (data.includes(`${key}=`)) {
+    // If the key already exists, update its value
+    const regex = new RegExp(`${key}=.*`);
+    data = data.replace(regex, `${key}="${value}"`);
+  } else {
+    // If the key does not exist, append a new config key
+    data += `\n#${comment}\n${key}="${value}"`;
+  }
+  return data;
 }
 main();
 

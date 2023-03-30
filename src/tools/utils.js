@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("node:path");
 
 function FixFolder(sourceFolder, targetFolder, fixFolderCb) {
+  console.log(`源目录：${sourceFolder},目标目录:${targetFolder}`)
   if (sourceFolder === "") {
     console.log("请指定源目录！");
     return;
@@ -35,6 +36,8 @@ function FixFolder(sourceFolder, targetFolder, fixFolderCb) {
   }
 }
 function FixFile(sourceFile, targetFile, fixFileCb) {
+  console.log(`源文件${sourceFile},目标文件:${targetFile}`)
+
   if (sourceFile === "") {
     console.log("请指定源文件！");
     return;

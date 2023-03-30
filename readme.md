@@ -64,13 +64,13 @@ pnpm run copy:source
 
 ```sh
 # process
-pnpm run bin:process scripts.test.echo 123 456
+pnpm run debug:process scripts.test.echo 123 456
 
 # studio
-pnpm run bin:studio test.echo 123 456
+pnpm run debug:studio test.echo 123 456
 
 # services
-pnpm run bin:service test.echo 123 456
+pnpm run debug:service test.echo 123 456
 ```
 
 ## 注意

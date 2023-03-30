@@ -4,15 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./src/server/index.js",
-    "bin:process": "node ./src/bin/process.js",
-    "bin:service": "node ./src/bin/services.js",
-    "bin:studio": "node ./src/bin/studio.js",
+    "comment-step1": ">>>>>>copy source<<<<<<<<",
+    "deloy:config": "node ./src/tools/deploy.js -e .env",
     "copy:source": "node ./src/tools/copy_yao_scripts.js",
+    "watch:source": "node ./src/tools/watch.js",
+    "comment-step2": ">>>>>>debug comments<<<<<<<<",
+    "debug:process": "node ./src/bin/process.js",
+    "debug:service": "node ./src/bin/services.js",
+    "debug:studio": "node ./src/bin/studio.js",
     "copy:target": "node ./src/tools/copy_folder.js",
     "copy:target:file": "node ./src/tools/copy_folder.js -f dist/source/app/studio/init2.js",
-    "deloy:config": "node ./src/tools/deloy.js",
-    "watch:source": "node ./src/tools/watch.js"
+    "start": "nodemon ./src/server/index.js"
   },
   "keywords": [
     "yao",

@@ -23,7 +23,7 @@ function CleanupFile(filename) {
   data = data.replace(regex3, "");
   if (content != data) {
     fs.writeFileSync(filename, data);
-    console.log(`File ${filename} updated and saved!`);
+    console.log(`文件已更新：${filename} !`);
   }
 }
 
@@ -136,7 +136,7 @@ function PatchFile(filename) {
 
   // save to new file
   fs.writeFileSync(filename, data.join("\n"));
-  console.log(`File ${filename} updated and saved!`);
+  console.log(`文件已更新：${filename}`);
 }
 
 module.exports = { CleanupFile, PatchFile };
