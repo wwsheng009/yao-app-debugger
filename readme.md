@@ -60,6 +60,19 @@ pnpm run copy:source
 
 - `Launch Yao Script`
 
+脚本调试
+
+```sh
+# process
+pnpm run bin:process scripts.test.echo 123 456
+
+# studio
+pnpm run bin:studio test.echo 123 456
+
+# services
+pnpm run bin:service test.echo 123 456
+```
+
 ## 注意
 
 如果是开发`studio`脚本,并且在脚本中有写`dsl`文件的操作。，`Yao`的环境变量需要修改成正式模式,防止在脚本运行过程中运行环境被不断的重载

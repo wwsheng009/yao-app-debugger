@@ -6,6 +6,9 @@
   "scripts": {
     "start": "nodemon ./src/server/index.js",
     "test": "node dist/test/test.js",
+    "bin:process": "node ./src/bin/process.js",
+    "bin:service": "node ./src/bin/services.js",
+    "bin:studio": "node ./src/bin/studio.js",
     "copy:source": "node ./src/tools/patch.js",
     "copy:target": "node ./src/tools/copyTemp.js",
     "copy:target:file": "node ./src/tools/copyTemp.js -f dist/source/app/studio/init2.js",
