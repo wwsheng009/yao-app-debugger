@@ -42,17 +42,17 @@ pnpm run "deloy:config"
 yao start
 ```
 
+`Yao`应用启动后，调试器就可以远程调用所有`yao`应用中的处理器与`API`。
+
 ## 复制 Yao 脚本到本地。
 
-使用脚本把 Yao 脚本复制到本地目录 dist/source/app。
+使用脚本把 Yao 的 scripts/services/studio 目录复制到本地目录 dist/source/app。在复制的同时，脚本已针对每一个 js 文件作了处理，在文件头加上必要的引用。在文件尾部也加上必要的函数导出。
 
 ```sh
 pnpm run copy:source
 ```
 
-`Yao`应用启动后，就可以本项目中调用所有`yao`应用中的处理器与`API`。
-
-处理器的调用方法，按 yao 脚本的格式进行处理即可。比如调用处理器就使用 Process 函数。调用查询就用 new Query()对象。在 nodejs 中已经封装了相关的函数与对象。
+## 调试
 
 ## vscode 调试
 
@@ -60,7 +60,7 @@ pnpm run copy:source
 
 - `Launch Yao Script`
 
-脚本调试
+### node 脚本调试
 
 ```sh
 # process
@@ -75,18 +75,27 @@ pnpm run bin:service test.echo 123 456
 
 ## 注意
 
-如果是开发`studio`脚本,并且在脚本中有写`dsl`文件的操作。，`Yao`的环境变量需要修改成正式模式,防止在脚本运行过程中运行环境被不断的重载
-
-```sh
-YAO_ENV="production"
-
-```
+如果是开发`studio`脚本,并且在脚本中有写`dsl`文件的操作。，`Yao`的环境变量`AO_ENV="production"`需要修改成正式模式,防止在脚本运行过程中运行环境被不断的重载
 
 ## 布署
 
-生成新的目录 dist/target/app。检查后再手动布署到 Yao 应用。
+### 实时复制
+
+执行实时监控命令，如果目录 dist/source/app 下的 js 文件发生了变更，脚本自动处理并复制到 yao 应用目录。
+
+```sh
+pnpm run watch:source
+```
+
+### 复制整个目录
+
+把 js 从源目录复制新目录。并作 js 文件转换，掐头去尾，删除头文件导出，与函数导出部分。检查后再手动布署到 Yao 应用。
+
+- 源目录默认是 dist/source/app 下的 scripts/services/studio 子目录。
+- 新目录默认是 dist/target/app 下的 scripts/services/studio 子目录。
+
+**注意**：脚本会清空目标目录下所有的内容。请小心操作。
 
 ```sh
 pnpm run copy:target
-``
 ```

@@ -5,13 +5,12 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon ./src/server/index.js",
-    "test": "node dist/test/test.js",
     "bin:process": "node ./src/bin/process.js",
     "bin:service": "node ./src/bin/services.js",
     "bin:studio": "node ./src/bin/studio.js",
-    "copy:source": "node ./src/tools/patch.js",
-    "copy:target": "node ./src/tools/copyTemp.js",
-    "copy:target:file": "node ./src/tools/copyTemp.js -f dist/source/app/studio/init2.js",
+    "copy:source": "node ./src/tools/copy_yao_scripts.js",
+    "copy:target": "node ./src/tools/copy_folder.js",
+    "copy:target:file": "node ./src/tools/copy_folder.js -f dist/source/app/studio/init2.js",
     "deloy:config": "node ./src/tools/deloy.js",
     "watch:source": "node ./src/tools/watch.js"
   },

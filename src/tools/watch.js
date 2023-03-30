@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const chokidar = require("chokidar");
-const { CleanupFile } = require("./cleanup");
+const { CleanupFile } = require("./lib");
 
 function main() {
   require("dotenv").config();
@@ -27,6 +27,9 @@ function main() {
   watcher
     .on("add", (filePath) => {
       const relativePath = path.relative(sourceFolder, filePath);
+      if (!/^((scripts|services|studio)\/)/.test(filePath)) {
+        return;
+      }
       const tempPath = path.join(tempFolder, relativePath);
       fs.mkdirSync(path.dirname(tempPath), { recursive: true });
       fs.copyFileSync(filePath, tempPath);
@@ -39,6 +42,9 @@ function main() {
     })
     .on("change", (filePath) => {
       const relativePath = path.relative(sourceFolder, filePath);
+      if (!/^((scripts|services|studio)\/)/.test(filePath)) {
+        return;
+      }
       const tempPath = path.join(tempFolder, relativePath);
       fs.mkdirSync(path.dirname(tempPath), { recursive: true });
       fs.copyFileSync(filePath, tempPath);
@@ -49,6 +55,9 @@ function main() {
     })
     .on("unlink", (filePath) => {
       const relativePath = path.relative(sourceFolder, filePath);
+      if (!/^((scripts|services|studio)\/)/.test(filePath)) {
+        return;
+      }
       const tempPath = path.join(tempFolder, relativePath);
       const yaoDestPath = path.join(yaoAppFolder, relativePath);
       fs.unlinkSync(tempPath);

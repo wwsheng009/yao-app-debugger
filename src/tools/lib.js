@@ -46,34 +46,79 @@ function PatchFile(filename) {
     functionNames.push(match[1]);
   }
 
-  let words = [];
-  if (/\slog\./.exec(fileContent) !== null) {
-    words.push("log");
-  }
-  if (/\shttp\./.exec(fileContent) !== null) {
-    words.push("http");
-  }
-  if (/\snew\s*Store\(/.exec(fileContent) !== null) {
-    words.push("Store");
-  }
-  if (/\snew\s*Exception\(/.exec(fileContent) !== null) {
-    words.push("Exception");
-  }
-  if (/\snew\s*FS\(/.exec(fileContent) !== null) {
-    words.push("FS");
-  }
-  if (/\snew\s*WebSocket\(/.exec(fileContent) !== null) {
-    words.push("WebSocket");
-  }
-  if (/\snew\s*Query\(/.exec(fileContent) !== null) {
-    words.push("Query");
-  }
-  if (/\sProcess\(/.exec(fileContent) !== null) {
-    words.push("Process");
-  }
-  if (/\sStudio\(/.exec(fileContent) !== null) {
-    words.push("Studio");
-  }
+  const lines = fileContent.split("\n");
+
+  // Filter out lines that start with "//" or "/*"
+  const filteredLines = lines.filter(
+    (line) => !line.trim().startsWith("//") && !line.trim().startsWith("/*")
+  );
+  // Check if remaining lines contain the string "new Query"
+
+  let words = filteredLines.reduce((result, line) => {
+    let match = line.match(/\s(log|http)\./);
+    if (match) {
+      if (match[1]) {
+        if (!result.includes(match[1])) {
+          result.push(match[1]);
+        }
+      }
+    }
+
+    match = line.match(/\s(Process|Studio)\(/);
+    if (match) {
+      if (match[1]) {
+        if (!result.includes(match[1])) {
+          result.push(match[1]);
+        }
+      }
+    }
+    match = line.match(/\snew\s(Store|Exception|FS|WebSocket|Query)\(/);
+    if (match) {
+      if (match[1]) {
+        if (!result.includes(match[1])) {
+          result.push(match[1]);
+        }
+      }
+    }
+
+    return result;
+  }, []);
+
+  // let words = [];
+  // if (filteredLines.some((line) => /\slog\./.test(line))) {
+  //   words.push("log");
+  // }
+
+  // if (filteredLines.some((line) => /\shttp\./.test(line))) {
+  //   words.push("http");
+  // }
+
+  // if (filteredLines.some((line) => /\snew\s*Store\(/.test(line))) {
+  //   words.push("Store");
+  // }
+
+  // if (filteredLines.some((line) => /\snew\s*Exception\(/.test(line))) {
+  //   words.push("Exception");
+  // }
+
+  // if (filteredLines.some((line) => /\snew\s*FS\(/.test(line))) {
+  //   words.push("FS");
+  // }
+
+  // if (filteredLines.some((line) => /\snew\s*WebSocket\(/.test(line))) {
+  //   words.push("WebSocket");
+  // }
+
+  // if (filteredLines.some((line) => /\snew\s*Query\(/.test(line))) {
+  //   words.push("Query");
+  // }
+
+  // if (filteredLines.some((line) => /\sProcess\(/.test(line))) {
+  //   words.push("Process");
+  // }
+  // if (filteredLines.some((line) => /\sStudio\(/.test(line))) {
+  //   words.push("Studio");
+  // }
 
   let data = [];
   let header = "";
