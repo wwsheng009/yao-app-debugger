@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("node:path");
 
 function FixFolder(sourceFolder, targetFolder, fixFolderCb) {
-  console.log(`源目录：${sourceFolder},目标目录:${targetFolder}`)
+  console.log(`源目录：${sourceFolder},目标目录:${targetFolder}`);
   if (sourceFolder === "") {
     console.log("请指定源目录！");
     return;
@@ -36,7 +36,7 @@ function FixFolder(sourceFolder, targetFolder, fixFolderCb) {
   }
 }
 function FixFile(sourceFile, targetFile, fixFileCb) {
-  console.log(`源文件${sourceFile},目标文件:${targetFile}`)
+  console.log(`源文件${sourceFile},目标文件:${targetFile}`);
 
   if (sourceFile === "") {
     console.log("请指定源文件！");
@@ -71,13 +71,9 @@ function FixFolderAndFile(
 ) {
   if (sourceFile !== "" && targetFile !== "") {
     FixFile(sourceFile, targetFile, fixFileCb);
-  } else {
-    console.log("文件路径为空，不复制");
   }
   if (sourceFolder !== "" && targetFolder !== "") {
     FixFolder(sourceFolder, targetFolder, fixFolderCb);
-  } else {
-    console.log("目录路径为空，不复制");
   }
 }
 
@@ -99,10 +95,10 @@ const CopyFolder = (source, destination) => {
         fs.copyFileSync(currentPath, newPath);
       }
     });
-    console.log(`Successfully copied ${source} to ${destination}`);
+    console.log(`文件已复制：${source} => ${destination}`);
   } catch (error) {
     console.error(
-      `Error copying ${source} to ${destination}: ${error.message}`
+      `复制文件出错: ${source} => ${destination}: ${error.message}`
     );
     return false;
   }

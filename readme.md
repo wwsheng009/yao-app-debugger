@@ -1,5 +1,7 @@
 # YAO 应用开发脚本调试工具
 
+![](./docs/public/yao-js-debug.png)
+
 ## 功能
 
 这个项目提供一个可调试 Yao 应用中的 js 脚本的运行环境。
@@ -63,15 +65,9 @@ pnpm run copy:source
 
 ## 调试
 
-## vscode 调试
-
-`vscode`环境下已内置调试配置：
-
-- `Launch Yao Script`
-
 ### 调试命令
 
-项目里提供了了几个方便调试命令，`debug:process`后面是处理器与参数。如果在编辑器里有断点，运行命令后会直接进入断点。
+项目里提供了了几个方便调试命令，`debug:process`后面是处理器与参数。执行后，会启动调试会话，并等待 vscode 调试连接。
 
 ```sh
 # process
@@ -83,6 +79,12 @@ pnpm run debug:studio test.echo 123 456
 # services
 pnpm run debug:service test.echo 123 456
 ```
+
+### vscode 启动调试
+
+- `vscode`在运行与调试中时选择调试配置`Attach To npm`。
+
+- 或是 Ctrl+Shift+P 查找命令 Debug: Attach to Node Process command:
 
 ## 布署
 

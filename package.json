@@ -9,9 +9,9 @@
     "copy:source": "node ./src/tools/copy_yao_scripts.js",
     "watch:source": "node ./src/tools/watch.js",
     "comment-step2": ">>>>>>debug comments<<<<<<<<",
-    "debug:process": "node ./src/bin/process.js",
-    "debug:service": "node ./src/bin/services.js",
-    "debug:studio": "node ./src/bin/studio.js",
+    "debug:process": "node --inspect-brk=9229 ./src/bin/process.js",
+    "debug:service": "node --inspect-brk=9229 ./src/bin/services.js",
+    "debug:studio": "node --inspect-brk=9229 ./src/bin/studio.js",
     "copy:target": "node ./src/tools/copy_folder.js",
     "copy:target:file": "node ./src/tools/copy_folder.js -f dist/source/app/studio/init2.js",
     "start": "nodemon ./src/server/index.js"

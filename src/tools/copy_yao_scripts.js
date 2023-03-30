@@ -70,6 +70,8 @@ function main() {
     }
   }
 
+  CopyDefaultFiles(targetAppFolder);
+
   let sourceFile = argv.file;
   let targetFile = argv.target_file;
 
@@ -81,7 +83,8 @@ function main() {
     fixFolderCallback,
     fixFileCallback
   );
-
+}
+function CopyDefaultFiles(targetAppFolder) {
   FixFile(
     "src/app/scripts/jsproxy.js",
     path.join(targetAppFolder, "scripts/jsproxy.js"),
