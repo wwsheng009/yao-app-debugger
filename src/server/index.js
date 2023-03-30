@@ -1,3 +1,3 @@
-const Startup = require("yao-node-server");
+const { startup } = require("yao-node-server");
 
-Startup();
+startup();

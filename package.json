@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "comment-step1": ">>>>>>copy source<<<<<<<<",
-    "deloy:config": "node ./src/tools/deploy.js -e .env",
+    "deploy:config": "node ./src/tools/deploy.js -e .env",
     "copy:source": "node ./src/tools/copy_yao_scripts.js",
     "watch:source": "node ./src/tools/watch.js",
     "comment-step2": ">>>>>>debug comments<<<<<<<<",
@@ -26,7 +26,7 @@
     "chokidar": "^3.5.3",
     "dotenv": "^16.0.3",
     "yao-node-client": "*",
-    "yao-node-server": "1.0.0",
+    "yao-node-server": "*",
     "yargs": "^17.7.1"
   },
   "devDependencies": {

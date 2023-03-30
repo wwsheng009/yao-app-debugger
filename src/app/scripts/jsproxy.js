@@ -1,19 +1,10 @@
 //代理js api请求
-// import { Store, Studio, WebSocket } from "yao-node-client";
-// import { Exception, Process, Query } from "yao-node-client";
-// import { $L, FS, http, log } from "yao-node-client";
 /**
  * api 代理服务，可以放在yao应用下
  * @param {object} payload
  * @returns
  */
 function Server(payload) {
-  // console.log("request received");
-  // console.log(payload);
-  // log.Info("debug served called");
-  // log.Info(payload);
-  // JSON.stringify({'a':null,'b':undefined})
-  // '{"a":null}'
   let resp = {
     code: 200,
     message: "",

@@ -37,12 +37,10 @@ cp .env.sample .env
 
 ### `Yao`应用设置
 
-Yao 应用需要作些配置。
-
-这里提供了脚本布署命令，执行脚本后会复制一些必要的配置文件到 yao 应用目录
+这里提供了脚本布署命令，执行脚本复制一些必要的配置文件到 yao 应用目录。一个项目只需要调用一次。
 
 ```sh
-pnpm run "deloy:config"
+pnpm run "deploy:config"
 ```
 
 ### 启动 yao 服务。
@@ -51,17 +49,17 @@ pnpm run "deloy:config"
 yao start
 ```
 
-`Yao`应用启动后，在调试器里就可以远程调用所有`yao`应用中的处理器与`API`。
+`Yao`应用启动后，在调试器里才可以远程调用所有`yao`应用中的处理器与`API`。
 
 ### 复制 Yao 脚本。
 
-使用脚本把 Yao 的 scripts/services/studio 目录复制到本地目录 dist/source/app 下。文件复制后，脚本会对每一个 js 文件作了处理，在文件头加上必要的引用。在文件尾部也加上必要的函数导出。
+使用脚本把 Yao 的 scripts/services/studio 目录复制到本地目录 dist/source/app 下。文件复制后，脚本会对每一个 js 文件作了处理，在文件头加上必要的引用。在文件尾部也加上必要的函数导出。处理后的 Yao 脚本就能直接在 Nodejs 环境中开发测试。
 
 ```sh
 pnpm run copy:source
 ```
 
-复制后的 js 文件会存放在目录 dist/source/app 下，可以直接修改或是创建新的 js 脚本。后面会使用脚本复制到 yao 应用目录。
+复制后的 js 文件会存放在目录 dist/source/app 下，可以在这目录下直接修改或是创建新的 js 脚本。后面会使用脚本复制到 yao 应用目录。
 
 ## 调试
 
@@ -114,3 +112,7 @@ pnpm run copy:target -t /yao-app-root-dir/
 ## 注意
 
 如果是开发`studio`脚本,并且在脚本中有写`dsl`文件的操作。需要把`Yao`的环境变量从`YAO_ENV="development"`修改成`YAO_ENV="production"`,防止在脚本运行过程中 Yao 的运行环境被不断的重载
+
+## 限制
+
+如果需要拦截 yao 中的 Web API 请求，还需要更多的配置，后面再更新。

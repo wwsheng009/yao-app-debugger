@@ -25,8 +25,8 @@ function main() {
     return;
   }
 
-  if (process.env.PORT === "") {
-    console.log("请设置环境变量：PORT");
+  if (process.env.NODE_PORT === "") {
+    console.log("请设置环境变量：NODE_PORT");
     return;
   }
 
@@ -68,7 +68,7 @@ function UpdateEnvConfig(envFile) {
   data = updateEnv(
     data,
     "REMOTE_DEBUG_SERVER",
-    `http://localhost:${process.env.PORT}/api/proxy/call`,
+    `http://localhost:${process.env.NODE_PORT}/api/proxy/call`,
     "调试服务接口"
   );
 
