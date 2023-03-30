@@ -9,7 +9,7 @@
     "copy:source": "node ./src/tools/copy_yao_scripts.js",
     "watch:source": "node ./src/tools/watch.js",
     "comment-step2": ">>>>>>debug comments<<<<<<<<",
-    "debug:process": "node ./src/bin/process.js",
+    "debug:process": "node ./src/bin/process.js scripts.demo.GetSelect",
     "debug:service": "node ./src/bin/services.js",
     "debug:studio": "node ./src/bin/studio.js",
     "copy:target": "node ./src/tools/copy_folder.js",

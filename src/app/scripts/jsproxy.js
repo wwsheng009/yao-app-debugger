@@ -25,6 +25,7 @@ function Server(payload) {
     const method = payload.method;
     const args = payload.args;
     const space = payload.space; //"dsl","script","system"
+    const engine = payload.engine;
     let localParams = [];
     if (Array.isArray(args)) {
       localParams = args;
@@ -41,9 +42,15 @@ function Server(payload) {
         resp.data = Studio(method, ...localParams);
         break;
       case "Query":
-        const query = new Query();
-        //@ts-ignore
-        resp.data = query[method](args);
+        if (engine) {
+          const query = new Query(engine);
+          //@ts-ignore
+          resp.data = query[method](args);
+        } else {
+          const query = new Query();
+          //@ts-ignore
+          resp.data = query[method](args);
+        }
         break;
       case "FileSystem":
         const fs = new FS(space);
@@ -63,7 +70,6 @@ function Server(payload) {
         resp.data = http[method](...args);
         break;
       case "Log":
-        // console.log("Log args:", args);
         //@ts-ignore
         log[method](...args);
         resp.data = {};
