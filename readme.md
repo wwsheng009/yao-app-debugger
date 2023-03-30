@@ -1,5 +1,11 @@
 # YAO 应用开发脚本调试工具
 
+## 功能
+
+这个项目用于调试 Yao 应用中的 js 脚本。如果 js 脚本的功能比较复杂，代码很长，直接使用 Yao 进行开发调试比较麻烦，需要写很多的 log 或是打印日志。本项目配置了一个在 vscode 里可以调试 yao js 脚本的环境。包含了一系列的处理工具。
+
+**注** 目前只保证能在编辑器`vscode`环境下使用正常。
+
 ## 开发环境准备
 
 ```sh
@@ -30,7 +36,7 @@ cp .env.sample .env
 
 Yao 应用需要作些配置。
 
-执行脚本复制一些必要的文件到 yao 应用目录
+这里提供了脚本布署命令，执行脚本后会复制一些必要的配置文件到 yao 应用目录
 
 ```sh
 pnpm run "deloy:config"
@@ -42,15 +48,17 @@ pnpm run "deloy:config"
 yao start
 ```
 
-`Yao`应用启动后，调试器就可以远程调用所有`yao`应用中的处理器与`API`。
+`Yao`应用启动后，在调试器里就可以远程调用所有`yao`应用中的处理器与`API`。
 
-## 复制 Yao 脚本到本地。
+## 复制 Yao 脚本。
 
-使用脚本把 Yao 的 scripts/services/studio 目录复制到本地目录 dist/source/app。在复制的同时，脚本已针对每一个 js 文件作了处理，在文件头加上必要的引用。在文件尾部也加上必要的函数导出。
+使用脚本把 Yao 的 scripts/services/studio 目录复制到本地目录 dist/source/app 下。文件复制后，脚本会对每一个 js 文件作了处理，在文件头加上必要的引用。在文件尾部也加上必要的函数导出。
 
 ```sh
 pnpm run copy:source
 ```
+
+复制后的 js 文件会存放在目录 dist/source/app 下，可以直接修改或是创建新的 js 脚本。后面会使用脚本复制到 yao 应用目录。
 
 ## 调试
 
@@ -60,7 +68,9 @@ pnpm run copy:source
 
 - `Launch Yao Script`
 
-### node 脚本调试
+### 调试命令
+
+项目里提供了了几个方便调试命令，`debug:process`后面是处理器与参数。如果在编辑器里有断点，运行命令后会直接进入断点。
 
 ```sh
 # process
@@ -73,29 +83,31 @@ pnpm run debug:studio test.echo 123 456
 pnpm run debug:service test.echo 123 456
 ```
 
-## 注意
-
-如果是开发`studio`脚本,并且在脚本中有写`dsl`文件的操作。，`Yao`的环境变量`AO_ENV="production"`需要修改成正式模式,防止在脚本运行过程中运行环境被不断的重载
-
 ## 布署
 
-### 实时复制
+布署有两种方式
 
-执行实时监控命令，如果目录 dist/source/app 下的 js 文件发生了变更，脚本自动处理并复制到 yao 应用目录。
+- 实时复制，当你修改目录 dist/source/app 下的文件后，脚本会帮你处理好文件，并复制到 yao 应用目录。
+
+打开新一个终端，执行以下的命令
 
 ```sh
 pnpm run watch:source
 ```
 
-### 复制整个目录
-
-把 js 从源目录复制新目录。并作 js 文件转换，掐头去尾，删除头文件导出，与函数导出部分。检查后再手动布署到 Yao 应用。
-
-- 源目录默认是 dist/source/app 下的 scripts/services/studio 子目录。
-- 新目录默认是 dist/target/app 下的 scripts/services/studio 子目录。
-
-**注意**：脚本会清空目标目录下所有的内容。请小心操作。
+- 脚本会把 js 脚本文件从目录 dist/source/app 复制到 dist/target/app 下，并进行代码处理。这里并不会复制到 Yao 应用目录，主要是这个操作比较危险。
 
 ```sh
 pnpm run copy:target
 ```
+
+如果确实需要复制到 yao 应用目录，也可以使用参数-t，指定目标目录。
+**注意**：脚本会清空目标目录下所有的内容。请小心操作。
+
+```sh
+pnpm run copy:target -t /yao-app-root-dir/
+```
+
+## 注意
+
+如果是开发`studio`脚本,并且在脚本中有写`dsl`文件的操作。需要把`Yao`的环境变量从`YAO_ENV="development"`修改成`YAO_ENV="production"`,防止在脚本运行过程中运行环境被不断的重载
