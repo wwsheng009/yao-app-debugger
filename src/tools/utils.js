@@ -1,26 +1,17 @@
 const fs = require("fs");
 const path = require("node:path");
 
-function FixFolderAndFile(
-  sourceFolder,
-  targetFolder,
-  sourceFile,
-  fixFolderCb,
-  fixFileCb
-) {
-  if (sourceFolder === "" && sourceFile === "") {
-    throw new Error("请指定源目录或文件");
-  }
-
-  if (targetFolder === sourceFolder) {
-    console.log("same folder abort!!");
+function FixFolder(sourceFolder, targetFolder, fixFolderCb) {
+  if (sourceFolder === "") {
+    console.log("请指定源目录！");
     return;
   }
-
-  if (fs.existsSync(sourceFile) && !fs.statSync(sourceFile).isDirectory()) {
-    let targetFile = path.join(targetFolder, path.basename(sourceFile));
-    fs.copyFileSync(sourceFile, targetFile);
-    fixFileCb(targetFile);
+  if (targetFolder === "") {
+    console.log("请指定目标目录！");
+    return;
+  }
+  if (targetFolder === sourceFolder) {
+    console.log("源目录与目标目录一样！");
     return;
   }
 
@@ -41,6 +32,49 @@ function FixFolderAndFile(
     fixFolderCb(targetFolder);
   } else {
     console.log(`directory not exist ${targetFolder}`);
+  }
+}
+function FixFile(sourceFile, targetFile, fixFileCb) {
+  if (sourceFile === "") {
+    console.log("请指定源文件！");
+    return;
+  }
+  if (targetFile === "") {
+    console.log("请指定目标文件！");
+    return;
+  }
+  if (sourceFile !== "" && sourceFile === targetFile) {
+    console.log(`源文件与目标文件一样！${sourceFile}`);
+    return;
+  }
+
+  if (fs.existsSync(sourceFile) && !fs.statSync(sourceFile).isDirectory()) {
+    // let targetFile = path.join(targetFolder, path.basename(sourceFile));
+    const folderPath = path.dirname(targetFile);
+    fs.mkdirSync(folderPath, { recursive: true });
+    fs.copyFileSync(sourceFile, targetFile);
+    fixFileCb(targetFile);
+    return;
+  }
+}
+
+function FixFolderAndFile(
+  sourceFolder,
+  targetFolder,
+  sourceFile,
+  targetFile,
+  fixFolderCb,
+  fixFileCb
+) {
+  if (sourceFile !== "" && targetFile !== "") {
+    FixFile(sourceFile, targetFile, fixFileCb);
+  } else {
+    console.log("文件路径为空，不复制");
+  }
+  if (sourceFolder !== "" && targetFolder !== "") {
+    FixFolder(sourceFolder, targetFolder, fixFolderCb);
+  } else {
+    console.log("目录路径为空，不复制");
   }
 }
 
@@ -104,6 +138,8 @@ function GetAllJsFiles(dir) {
 module.exports = {
   CopyFolder,
   FixFolderAndFile,
+  FixFile,
+  FixFolder,
   GetAllJsFiles,
   CheckIsJsFile,
 };

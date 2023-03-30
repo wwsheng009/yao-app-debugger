@@ -25,6 +25,11 @@ function main() {
         type: "string",
         default: "",
       },
+      target_file: {
+        alias: "o",
+        type: "string",
+        default: "",
+      },
     })
     .parseSync();
 
@@ -33,8 +38,16 @@ function main() {
   let targetFolder = path.resolve(argv.target);
 
   let sourceFile = path.resolve(argv.file);
+  let targetFile = path.resolve(argv.target_file);
 
-  FixFolderAndFile(sourceFolder, targetFolder, sourceFile, fixCodes, fixFile);
+  FixFolderAndFile(
+    sourceFolder,
+    targetFolder,
+    sourceFile,
+    targetFile,
+    fixCodes,
+    fixFile
+  );
 }
 
 function fixCodes(folder) {

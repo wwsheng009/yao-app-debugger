@@ -1,16 +1,22 @@
 const path = require("node:path");
+const fs = require("fs");
 const { PatchFile } = require("./lib");
 const yargs = require("yargs/yargs");
 const { hideBin } = require("yargs/helpers");
-const { FixFolderAndFile, GetAllJsFiles, CheckIsJsFile } = require("./utils");
+const {
+  FixFolderAndFile,
+  GetAllJsFiles,
+  CheckIsJsFile,
+  FixFile,
+} = require("./utils");
 
-function fixCodes(folder) {
+function fixFolderCallback(folder) {
   let files = GetAllJsFiles(folder);
   for (const file of files) {
     PatchFile(file);
   }
 }
-function fixFile(fname) {
+function fixFileCallback(fname) {
   if (!CheckIsJsFile(fname)) {
     console.log("Not js file");
     return;
@@ -38,6 +44,11 @@ function main() {
         type: "string",
         default: "",
       },
+      target_file: {
+        alias: "o",
+        type: "string",
+        default: "",
+      },
     })
     .parseSync();
 
@@ -49,21 +60,45 @@ function main() {
       sourceFolder = process.env.YAO_APP_ROOT;
     }
   }
-  sourceFolder = path.resolve(sourceFolder);
 
-  let targetFolder = argv.target;
+  let targetAppFolder = argv.target;
 
-  if (targetFolder === "") {
+  if (targetAppFolder === "") {
     require("dotenv").config();
     if (process.env.LOCAL_APP_ROOT) {
-      targetFolder = process.env.LOCAL_APP_ROOT;
+      targetAppFolder = process.env.LOCAL_APP_ROOT;
     }
   }
-  targetFolder = path.resolve(targetFolder);
 
-  let sourceFile = path.resolve(argv.file);
+  let sourceFile = argv.file;
+  let targetFile = argv.target_file;
 
-  FixFolderAndFile(sourceFolder, targetFolder, sourceFile, fixCodes, fixFile);
+  FixFolderAndFile(
+    sourceFolder,
+    targetAppFolder,
+    sourceFile,
+    targetFile,
+    fixFolderCallback,
+    fixFileCallback
+  );
+
+  FixFile(
+    "src/app/scripts/jsproxy.js",
+    path.join(targetAppFolder, "scripts/jsproxy.js"),
+    fixFileCallback
+  );
+  FixFile(
+    "src/app/scripts/security.js",
+    path.join(targetAppFolder, "scripts/security.js"),
+    fixFileCallback
+  );
+  fs.mkdirSync(path.join(targetAppFolder, "apis"), {
+    recursive: true,
+  });
+  fs.copyFileSync(
+    "src/app/apis/proxy.http.json",
+    path.join(targetAppFolder, "apis/proxy.http.json")
+  );
 }
 
 main();
