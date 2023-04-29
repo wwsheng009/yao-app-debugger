@@ -14,17 +14,13 @@ function CheckAccessKey(path, params, queries, payload, headers) {
   }
   token = token || (queries["token"] && queries["token"][0]);
   if (!token) {
-    error();
+    throw new Exception("Debug Proxy Call token Not set", 403);
   }
   const access_key = Process("yao.env.get", "YAO_API_ACCESS_KEY");
   if (!access_key) {
     throw new Exception("YAO_API_ACCESS_KEY Not set", 403);
   }
   if (access_key !== token) {
-    error();
+    throw new Exception("YAO_API_ACCESS_KEY not equal token", 403);
   }
-}
-
-function error() {
-  throw new Exception("Not Authorized", 403);
 }

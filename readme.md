@@ -42,10 +42,12 @@ cp .env.sample .env
 这里提供了脚本布署命令，执行脚本复制一些必要的配置文件到 yao 应用目录。一个项目只需要调用一次。
 
 ```sh
-pnpm run "deploy:config"
+pnpm run "deploy"
 ```
 
 ### 启动 yao 服务。
+
+切换到应用目录，启动 yao 服务
 
 ```sh
 yao start
@@ -58,7 +60,7 @@ yao start
 使用脚本把 Yao 的 scripts/services/studio 目录复制到本地目录 dist/source/app 下。文件复制后，脚本会对每一个 js 文件作了处理，在文件头加上必要的引用。在文件尾部也加上必要的函数导出。处理后的 Yao 脚本就能直接在 Nodejs 环境中开发测试。
 
 ```sh
-pnpm run copy:source
+pnpm run copy
 ```
 
 复制后的 js 文件会存放在目录 dist/source/app 下，可以在这目录下直接修改或是创建新的 js 脚本。后面会使用脚本复制到 yao 应用目录。
@@ -71,13 +73,13 @@ pnpm run copy:source
 
 ```sh
 # process
-pnpm run debug:process scripts.test.echo 123 456
+pnpm run process scripts.test.echo 123 456
 
 # studio
-pnpm run debug:studio test.echo 123 456
+pnpm run studio test.echo 123 456
 
 # services
-pnpm run debug:service test.echo 123 456
+pnpm run service test.echo 123 456
 ```
 
 ### vscode 启动调试
@@ -95,7 +97,7 @@ pnpm run debug:service test.echo 123 456
 打开新一个终端，执行以下的命令
 
 ```sh
-pnpm run watch:source
+pnpm run watch
 ```
 
 - 目录复制。脚本复制目录 dist/source/app 到 dist/target/app 下，并进行代码处理。默认情况下并不会复制到 Yao 应用目录，主要是这个操作比较危险。

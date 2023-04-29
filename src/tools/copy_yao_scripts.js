@@ -70,6 +70,13 @@ function main() {
     }
   }
 
+  const local = path.resolve("./");
+  const target = path.resolve(targetAppFolder);
+  if (!target.includes(local)) {
+    console.log("Error:目标目录不在调试器目录内，请检查配置！");
+    return;
+  }
+
   CopyDefaultFiles(targetAppFolder);
 
   let sourceFile = argv.file;

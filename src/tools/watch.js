@@ -15,6 +15,13 @@ function main() {
   }
   const sourceFolder = path.resolve(process.env.LOCAL_APP_ROOT);
 
+  const local = path.resolve("./");
+  const source = path.resolve(sourceFolder);
+  if (!source.includes(local)) {
+    console.log("Error:源目录不在调试器目录内，请检查配置！");
+    return;
+  }
+
   const tempFolder = path.resolve("./dist/target"); //process.env.YAO_APP_ROOT);
 
   const yaoAppFolder = path.resolve(process.env.YAO_APP_ROOT);
@@ -23,13 +30,16 @@ function main() {
     ignored: /(^|[\/\\])\../, // ignore dotfiles
     persistent: true,
   });
+  console.log(`开始监控目录文件变更:${sourceFolder}`);
 
   watcher
     .on("add", (filePath) => {
       const relativePath = path.relative(sourceFolder, filePath);
-      if (!/^((scripts|services|studio)\/)/.test(filePath)) {
+      if (!/^((scripts|services|studio)\/)/.test(relativePath)) {
         return;
       }
+      console.log(`创建新文件:${relativePath}`);
+
       const tempPath = path.join(tempFolder, relativePath);
       fs.mkdirSync(path.dirname(tempPath), { recursive: true });
       fs.copyFileSync(filePath, tempPath);
@@ -42,9 +52,11 @@ function main() {
     })
     .on("change", (filePath) => {
       const relativePath = path.relative(sourceFolder, filePath);
-      if (!/^((scripts|services|studio)\/)/.test(filePath)) {
+      if (!/^((scripts|services|studio)\/)/.test(relativePath)) {
         return;
       }
+      console.log(`修改文件:${relativePath}`);
+
       const tempPath = path.join(tempFolder, relativePath);
       fs.mkdirSync(path.dirname(tempPath), { recursive: true });
       fs.copyFileSync(filePath, tempPath);
@@ -55,9 +67,11 @@ function main() {
     })
     .on("unlink", (filePath) => {
       const relativePath = path.relative(sourceFolder, filePath);
-      if (!/^((scripts|services|studio)\/)/.test(filePath)) {
+      if (!/^((scripts|services|studio)\/)/.test(relativePath)) {
         return;
       }
+      console.log(`删除文件:${relativePath}`);
+
       const tempPath = path.join(tempFolder, relativePath);
       const yaoDestPath = path.join(yaoAppFolder, relativePath);
       fs.unlinkSync(tempPath);

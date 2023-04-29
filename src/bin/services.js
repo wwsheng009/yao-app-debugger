@@ -1,6 +1,11 @@
 const { Process } = require("yao-node-client");
+const CheckConfig = require("./lib");
 
 function main() {
+  if (!CheckConfig()) {
+    return;
+  }
+
   let args = process.argv.slice(2);
 
   if (args.length < 1) {
