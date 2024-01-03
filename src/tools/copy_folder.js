@@ -3,6 +3,9 @@ const { hideBin } = require("yargs/helpers");
 
 const { FixFolderAndFile } = require("./utils");
 const { CleanupFile } = require("./lib");
+const path = require("path");
+const fs = require("fs");
+const { GetAllJsFiles, CheckIsJsFile } = require("./utils");
 
 /**
  * 清理与修正nodejs打包生成生成的代码。

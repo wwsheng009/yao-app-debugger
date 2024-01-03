@@ -13,7 +13,7 @@ const {
 function fixFolderCallback(folder) {
   let files = GetAllJsFiles(folder);
   for (const file of files) {
-    PatchFile(file);
+    PatchFile(file, folder);
   }
 }
 function fixFileCallback(fname) {

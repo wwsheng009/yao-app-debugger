@@ -1,5 +1,4 @@
 const fs = require("fs");
-
 /**
  * 简单处理js文件
  * @param filename 文件名
@@ -21,6 +20,21 @@ function CleanupFile(filename) {
   const regex3 = /exports\.[\s\S]*[;]?[\r\n]?[\r\n]?/gi;
 
   data = data.replace(regex3, "");
+
+  let lines = data.split("\n");
+  const regexReuire = /require\("(.+?)"\);/;
+
+  // replace the require
+  lines = lines.map((line) => {
+    line = line.replace(regexReuire, (match, p1) => {
+      let str = p1.replace("../scripts/", "");
+      const replacedContent = str.replace(/\//g, ".");
+      return `Require("${replacedContent}");`;
+    });
+    return line;
+  });
+  data = lines.join("\n");
+
   if (content != data) {
     fs.writeFileSync(filename, data);
     console.log(`文件已更新：${filename} !`);
@@ -30,20 +44,34 @@ function CleanupFile(filename) {
 /**
  * 简单处理js文件
  * @param filename 文件名
+ * @param folder 目录
  */
-function PatchFile(filename) {
+function PatchFile(filename, folder) {
   if (!fs.existsSync(filename)) {
     return;
   }
+
   const fileContent = fs.readFileSync(filename, "utf8");
   // Define the regular expression to match function names
   const regex = /^function\s+([a-zA-Z_$][0-9a-zA-Z_$]*)\s*\(/g;
 
   // Find all matches
-
+  // scan all the function name, will export them later
   const functionNames = [];
 
-  const lines = fileContent.split("\n");
+  let lines = fileContent.split("\n");
+
+  const regexReuire = /Require\("(.+?)"\);/;
+
+  // replace the require
+  lines = lines.map((line) => {
+    line = line.replace(regexReuire, (match, p1) => {
+      // always relative to script folder
+      const replacedContent = "../scripts/" + p1.replace(/\./g, "/");
+      return `require("${replacedContent}");`;
+    });
+    return line;
+  });
 
   // Filter out lines that start with "//" or "/*"
   const filteredLines = lines.filter(
@@ -87,13 +115,14 @@ function PatchFile(filename) {
     return result;
   }, []);
 
+  // new file content
   let data = [];
   let header = "";
   if (words.length) {
     header = `const { ${words.join(", ")} } = require("yao-node-client");`;
     data.push(header);
   }
-  data.push(fileContent);
+  data = data.concat(...lines);
 
   let tail = "";
   if (functionNames.length) {

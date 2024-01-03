@@ -69,7 +69,7 @@ pnpm run copy
 
 ### 调试命令
 
-项目里提供了了几个方便调试命令，`debug:process`后面是处理器与参数。执行后，会启动调试会话，并等待 vscode 调试连接。
+项目里提供了了几个方便调试命令，比如之前使用`yao run scripts.xxxx`,现在需要使用 `pnpm run process scripts.xxxx`，后面是处理器与参数。执行后，会启动调试会话，并等待 vscode 调试连接。
 
 ```sh
 # process
@@ -116,6 +116,12 @@ pnpm run copy:target -t /yao-app-root-dir/
 ## 注意
 
 如果是开发`studio`脚本,并且在脚本中有写`dsl`文件的操作。需要把`Yao`的环境变量从`YAO_ENV="development"`修改成`YAO_ENV="production"`,防止在脚本运行过程中 Yao 的运行环境被不断的重载
+
+如果在命令行中使用 json 参数，需要注意双引号要加上转义符
+
+```sh
+pnpm run process scripts.doc.vector.Match '::{\"pathname\":\"/x/Table\"}' '::[{\"role\":\"user\", \"content\":\"Yao 是什么\"}]'
+```
 
 ## API 调试
 
