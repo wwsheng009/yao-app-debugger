@@ -26,8 +26,8 @@
   "dependencies": {
     "chokidar": "^3.5.3",
     "dotenv": "^16.0.3",
-    "yao-node-client": "*",
-    "yao-node-server": "*",
+    "yao-node-client": "^1.0.0",
+    "yao-node-server": "^1.0.0",
     "yargs": "^17.7.1"
   },
   "devDependencies": {
