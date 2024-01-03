@@ -5,16 +5,16 @@
   "main": "index.js",
   "scripts": {
     "comment-step1": ">>>>>>copy source<<<<<<<<",
-    "deploy": "node ./src/tools/deploy.js -e .env",
-    "copy": "node ./src/tools/copy_yao_scripts.js",
+    "update:yaoapp": "node ./src/tools/deploy.js -e .env",
+    "get:yaoapp": "node ./src/tools/copy_yao_scripts.js",
     "watch": "node ./src/tools/watch.js",
     "comment-step2": ">>>>>>debug comments<<<<<<<<",
     "process": "node --inspect-brk=9229 ./src/bin/process.js",
     "script": "node --inspect-brk=9229 ./src/bin/scripts.js",
     "service": "node --inspect-brk=9229 ./src/bin/services.js",
     "studio": "node --inspect-brk=9229 ./src/bin/studio.js",
-    "copy:target": "node ./src/tools/copy_folder.js",
-    "copy:target:file": "node ./src/tools/copy_folder.js -f dist/source/app/studio/init2.js",
+    "write:target": "node ./src/tools/copy_folder.js",
+    "write:yaoapp": "node ./src/tools/copy_folder.js -f dist/source/app/studio/init2.js",
     "start": "nodemon ./src/server/index.js"
   },
   "keywords": [

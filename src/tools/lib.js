@@ -9,13 +9,24 @@ function CleanupFile(filename) {
   }
   const content = fs.readFileSync(filename, "utf8");
 
+  const checkModulereg =
+    /\/\/this file is a module lib,don't delete this mark line/;
+  let IsModuleFile = false;
+  if (checkModulereg.test(content)) {
+    IsModuleFile = true;
+  }
+
   let data = content;
   const regex = /const[\s\S]*require\("yao-node-client"\)[;]?[\r\n]?[\r\n]?/gi;
   data = data.replace(regex, "");
 
   // /module\.exports[^]*[;]\n[\n]?/gi
   const regex2 = /module\.exports[\s\S]*}[;]?[\r\n]?[\r\n]?/gi;
-  data = data.replace(regex2, "");
+  if (IsModuleFile) {
+    data = data.replace(checkModulereg, "");
+  } else {
+    data = data.replace(regex2, "");
+  }
 
   const regex3 = /exports\.[\s\S]*[;]?[\r\n]?[\r\n]?/gi;
 
@@ -124,10 +135,16 @@ function PatchFile(filename, folder) {
   }
   data = data.concat(...lines);
 
-  let tail = "";
-  if (functionNames.length) {
-    tail = `module.exports = { ${functionNames.join(", ")} };`;
-    data.push(tail);
+  // check if has the exports
+  const regex2 = /module\.exports[\s\S]*}[;]?[\r\n]?[\r\n]?/gi;
+  if (regex2.test(fileContent)) {
+    data.push("//this file is a module lib,don't delete this mark line");
+  } else {
+    let tail = "";
+    if (functionNames.length) {
+      tail = `module.exports = { ${functionNames.join(", ")} };`;
+      data.push(tail);
+    }
   }
 
   // save to new file

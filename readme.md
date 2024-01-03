@@ -20,6 +20,10 @@ pnpm i
 
 ## 开发环境准备
 
+这个调试器的工作原理是把 yao 应用的 js 脚本复制到调试器应用的目录，并且在复制后把 yao 应用中 js 脚本中的特殊处理器进行 nodejs 适配。
+
+当在 nodejs 环境中调用 yao 的处理器时，会通过 http 请求调用 yao 应用服务器中的代理处理器。
+
 ### 设置环境变量
 
 ```sh
@@ -42,7 +46,7 @@ cp .env.sample .env
 这里提供了脚本布署命令，执行脚本复制一些必要的配置文件到 yao 应用目录。一个项目只需要调用一次。
 
 ```sh
-pnpm run "deploy"
+pnpm run update:yaoapp
 ```
 
 ### 启动 yao 服务。
@@ -60,7 +64,7 @@ yao start
 使用脚本把 Yao 的 scripts/services/studio 目录复制到本地目录 dist/source/app 下。文件复制后，脚本会对每一个 js 文件作了处理，在文件头加上必要的引用。在文件尾部也加上必要的函数导出。处理后的 Yao 脚本就能直接在 Nodejs 环境中开发测试。
 
 ```sh
-pnpm run copy
+pnpm run get:yaoapp
 ```
 
 复制后的 js 文件会存放在目录 dist/source/app 下，可以在这目录下直接修改或是创建新的 js 脚本。后面会使用脚本复制到 yao 应用目录。
@@ -103,14 +107,14 @@ pnpm run watch
 - 目录复制。脚本复制目录 dist/source/app 到 dist/target/app 下，并进行代码处理。默认情况下并不会复制到 Yao 应用目录，主要是这个操作比较危险。
 
 ```sh
-pnpm run copy:target
+pnpm run write:target
 ```
 
 如果确实需要直接复制到 yao 应用目录，也可以使用参数-t，指定 Yao 应用目录。
 **注意**：脚本会清空目标目录/scripts/studio/services 下所有的内容。请小心操作。
 
 ```sh
-pnpm run copy:target -t /yao-app-root-dir/
+pnpm run write:yaoapp -t /yao-app-root-dir/
 ```
 
 ## 注意
